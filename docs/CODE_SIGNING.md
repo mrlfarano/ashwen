@@ -65,6 +65,20 @@ Code signing is required for:
 
 ### 5. Add Secrets to GitHub
 
+**Option A: Using the setup script (Recommended)**
+
+Run the interactive setup script from the repository root:
+
+```powershell
+# On Windows
+.\scripts\setup-secrets-simple.ps1 -MacOS
+
+# On Linux/macOS
+./scripts/setup-github-secrets.sh
+```
+
+**Option B: Manual setup with GitHub CLI**
+
 ```bash
 # Using GitHub CLI
 gh secret set APPLE_CERTIFICATE_BASE64 < certificate_base64.txt
@@ -107,6 +121,18 @@ base64 -i certificate.pfx -o certificate_base64.txt
 ```
 
 #### 3. Add Secrets to GitHub
+
+**Option A: Using the setup script (Recommended)**
+
+```powershell
+# On Windows
+.\scripts\setup-secrets-simple.ps1 -WindowsPFX
+
+# On Linux/macOS
+./scripts/setup-github-secrets.sh
+```
+
+**Option B: Manual setup with GitHub CLI**
 
 ```bash
 # Using GitHub CLI
