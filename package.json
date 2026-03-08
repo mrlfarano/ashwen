@@ -1,0 +1,35 @@
+{
+  "name": "ashwen-desktop",
+  "private": true,
+  "version": "0.1.0",
+  "main": "electron/main.js",
+  "scripts": {
+    "install:frontend": "npm --prefix frontend install",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "python backend/run.py",
+    "dev:electron": "wait-on tcp:5173 tcp:8000 && cross-env ASHWEN_DEV_SERVER_URL=http://localhost:5173 ASHWEN_SKIP_BACKEND=1 electron .",
+    "dev": "concurrently -k \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:electron\"",
+    "build:frontend": "npm --prefix frontend run build",
+    "build:backend": "pyinstaller --noconfirm --clean --onefile --paths backend --name ashwen-backend --distpath dist/backend backend/run.py",
+    "build:desktop": "electron-builder",
+    "dist": "npm run build:frontend && npm run build:backend && npm run build:desktop",
+    "taskmaster:init": "npx -y task-master-ai init",
+    "taskmaster:parse-prd": "npx -y task-master-ai parse-prd .taskmaster/docs/ashwen-prd.md",
+    "taskmaster:parse-prd:research": "npx -y task-master-ai parse-prd .taskmaster/docs/ashwen-prd.md --research",
+    "taskmaster:models": "npx -y task-master-ai models --setup"
+  },
+  "devDependencies": {
+    "@electron/notarize": "^2.5.0",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
+    "electron": "^35.0.0",
+    "electron-builder": "^25.1.8",
+    "wait-on": "^8.0.3"
+  },
+  "dependencies": {
+    "@sentry/electron": "^5.0.0",
+    "electron-log": "^5.2.4",
+    "electron-updater": "^6.3.9",
+    "posthog-node": "^4.0.0"
+  }
+}

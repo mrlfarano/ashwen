@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- =========================================================
+         Ashwen Desktop - macOS Entitlements
+         
+         These entitlements are required for hardened runtime and
+         notarization. They grant the minimum permissions needed for
+         the application to function correctly.
+         ========================================================= -->
+    
+    <!-- Enable hardened runtime (required for notarization) -->
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
+    
+    <!-- Allow unsigned executable memory for V8 JavaScript engine -->
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+    
+    <!-- Disable library validation for native node modules -->
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <true/>
+    
+    <!-- Network client access - for outbound HTTP/WebSocket connections -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+    
+    <!-- Network server - for local backend server (127.0.0.1:8000) -->
+    <key>com.apple.security.network.server</key>
+    <true/>
+    
+    <!-- File access: user-selected files (open/save dialogs) -->
+    <key>com.apple.security.files.user-selected.read-write</key>
+    <true/>
+    
+    <!-- File access: downloads folder -->
+    <key>com.apple.security.files.downloads.read-write</key>
+    <true/>
+    
+    <!-- File access: pictures folder (for project icons) -->
+    <key>com.apple.security.files.pictures.read-only</key>
+    <true/>
+    
+    <!-- File access: documents folder (for project files) -->
+    <key>com.apple.security.files.documents.read-write</key>
+    <true/>
+    
+    <!-- Access to application data directory -->
+    <key>com.apple.security.files.bookmarks.app-scope</key>
+    <true/>
+    
+    <!-- Audio input for voice features (future use) -->
+    <key>com.apple.security.device.audio-input</key>
+    <true/>
+    
+    <!-- Camera access for video features (future use) -->
+    <key>com.apple.security.device.camera</key>
+    <true/>
+    
+    <!-- USB device access for hardware key authentication -->
+    <key>com.apple.security.device.usb</key>
+    <true/>
+    
+    <!-- Smart card access for certificate-based authentication -->
+    <key>com.apple.security.smartcard</key>
+    <true/>
+    
+    <!-- Apple Events for automation (optional, disabled by default) -->
+    <!-- Uncomment if you need to automate other applications -->
+    <!-- <key>com.apple.security.automation.apple-events</key>
+    <true/> -->
+    
+    <!-- Print access for exporting documents -->
+    <key>com.apple.security.print</key>
+    <true/>
+</dict>
+</plist>

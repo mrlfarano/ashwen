@@ -1,0 +1,93 @@
+{
+	"meta": {
+		"generatedAt": "2026-03-08T00:53:54.145Z",
+		"tasksAnalyzed": 10,
+		"totalTasks": 10,
+		"analysisCount": 10,
+		"thresholdScore": 5,
+		"projectName": "Ashwen",
+		"usedResearch": false
+	},
+	"complexityAnalysis": [
+		{
+			"taskId": 1,
+			"taskTitle": "Harden Electron startup and packaging for Windows and macOS",
+			"complexityScore": 7,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Break down into subtasks for: 1) Electron startup optimizations (preload, contextIsolation, lazy loading), 2) Windows NSIS packaging config, 3) macOS dmg/pkg packaging config, 4) electron-updater integration, 5) Cross-platform testing and benchmarking per test strategy.",
+			"reasoning": "Involves platform-specific Electron configurations, performance profiling, multiple optimizations (preload scripts, security settings), packaging for two OS, auto-updater, and rigorous testing across environments. Cross-platform nature and Electron v28+ best practices increase complexity, but well-documented[1][2]."
+		},
+		{
+			"taskId": 2,
+			"taskTitle": "Implement code signing for macOS and Windows production builds",
+			"complexityScore": 8,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Create subtasks for: 1) macOS Developer ID cert setup and entitlements.plist, 2) macOS notarization with apple API, 3) Windows EV cert with signtool integration, 4) Secure CI/CD cert storage in GitHub Actions and verification tests.",
+			"reasoning": "Requires handling platform-specific certs, notarization APIs, entitlements, secure CI/CD secrets management, and verification tools (spctl, signtool). High complexity due to external dependencies (certs, Apple APIs) and distribution requirements."
+		},
+		{
+			"taskId": 3,
+			"taskTitle": "Add crash reporting and product analytics integration",
+			"complexityScore": 5,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Divide into: 1) Sentry Electron integration with release tracking, 2) PostHog analytics event tracking for key flows, 3) Opt-in consent UI and privacy compliance testing.",
+			"reasoning": "Standard SDK integrations with good docs, but involves privacy-sensitive opt-in UI, event tracking across app flows, and crash simulation testing. Moderate complexity with cross-process Electron considerations."
+		},
+		{
+			"taskId": 4,
+			"taskTitle": "Create first-run onboarding flow for credentials and local model setup",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Subtasks: 1) SvelteKit wizard UI components (welcome, API keys, model download, project create), 2) Cross-platform credential encryption with keytar, 3) Local model download/error handling for Ollama/LM Studio, 4) E2E testing of full flow.",
+			"reasoning": "Multi-step Svelte UI wizard, external service integrations (API keys, model downloads), encryption, error recovery, and comprehensive E2E tests. UI complexity and external dependencies elevate it beyond simple forms."
+		},
+		{
+			"taskId": 5,
+			"taskTitle": "Improve local project management, memory persistence, and WebSocket reliability",
+			"complexityScore": 8,
+			"recommendedSubtasks": 5,
+			"expansionPrompt": "Break into: 1) SQLite schema/CRUD for projects with FTS5 indexing, 2) better-sqlite3 Python backend integration, 3) WebSocket reconnection with exponential backoff, 4) Performance load testing (1000+ entries), 5) Network simulation tests.",
+			"reasoning": "Combines database design (SQLite FTS5), Python backend changes, real-time WebSocket reliability with reconnection logic, performance optimization, and load testing. Multiple technical domains increase complexity."
+		},
+		{
+			"taskId": 6,
+			"taskTitle": "Implement memory capture, search, and retrieval system",
+			"complexityScore": 9,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Subtasks covering: 1) Vector embeddings pipeline with sentence-transformers, 2) SQLite vector extension or LanceDB setup, 3) Hybrid BM25+cosine search implementation, 4) Auto-capture logic for chat/context, 5) Performance benchmarking (<200ms), 6) Accuracy testing (>85%).",
+			"reasoning": "Advanced ML features: vector embeddings, hybrid semantic/keyword search, new storage backend choice, auto-capture logic, strict perf/accuracy metrics. High technical risk and implementation effort."
+		},
+		{
+			"taskId": 7,
+			"taskTitle": "Expand agent orchestration and background task execution",
+			"complexityScore": 9,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Divide into: 1) Queue system (BullMQ/SQLite) setup, 2) Agent registry and LLM routing logic, 3) Worker pools for parallel execution, 4) WebSocket real-time status updates, 5) Concurrency testing (10 tasks), 6) Error recovery mechanisms.",
+			"reasoning": "Builds distributed task queue system with concurrency, agent routing, real-time monitoring, and error handling. Complex state management, race conditions, and integration with existing WebSocket/memory systems."
+		},
+		{
+			"taskId": 8,
+			"taskTitle": "Add organizations, team workspaces, and cloud account system",
+			"complexityScore": 9,
+			"recommendedSubtasks": 7,
+			"expansionPrompt": "Subtasks: 1) Supabase auth setup (email/OAuth), 2) Postgres schema for orgs/workspaces, 3) Row-level security policies, 4) API routes for CRUD/invites/permissions, 5) Local SQLite to cloud migration, 6) Multi-tenant testing, 7) UI components.",
+			"reasoning": "Full SaaS backend: auth, database design, RLS security, APIs, migration strategy, multi-tenancy. High complexity from security model, data migration, and scaling considerations."
+		},
+		{
+			"taskId": 9,
+			"taskTitle": "Implement cloud sync for projects, memories, and agent state",
+			"complexityScore": 10,
+			"recommendedSubtasks": 8,
+			"expansionPrompt": "Break down: 1) CRDT/OT conflict resolution design, 2) Bi-directional sync queues with retries, 3) Offline-first architecture, 4) WebSocket real-time sync, 5) Multi-device consistency testing, 6) Network interruption simulations, 7) Data integrity validation, 8) Performance optimization.",
+			"reasoning": "Extremely complex: distributed systems, CRDTs/OT for conflicts, offline-first, real-time sync, multi-device testing. High risk of data corruption; requires deep systems expertise."
+		},
+		{
+			"taskId": 10,
+			"taskTitle": "Add GitHub/GitLab integration for repos and pull requests",
+			"complexityScore": 7,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Subtasks: 1) OAuth2 flows for GitHub/GitLab, 2) Local repo cloning and management, 3) PR diff parsing with LLM analysis, 4) Context injection into agent prompts and E2E testing.",
+			"reasoning": "Multiple OAuth providers, API integrations, local git ops, LLM processing of diffs, prompt engineering. Moderate-high complexity from external APIs and git interactions."
+		}
+	]
+}

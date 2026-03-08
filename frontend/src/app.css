@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ashwen-50: #f0f4ff;
+  --color-ashwen-100: #e0e8ff;
+  --color-ashwen-200: #c7d4fe;
+  --color-ashwen-300: #a3b8fc;
+  --color-ashwen-400: #7b93f8;
+  --color-ashwen-500: #5a6ff2;
+  --color-ashwen-600: #4650e8;
+  --color-ashwen-700: #3b3fd7;
+  --color-ashwen-800: #3234ab;
+  --color-ashwen-900: #2d3280;
+  --color-ashwen-950: #1e1e4d;
+  
+  --color-surface-50: #f6f6f9;
+  --color-surface-100: #ebedf5;
+  --color-surface-200: #d3d7ed;
+  --color-surface-300: #b2b8de;
+  --color-surface-400: #8b94c8;
+  --color-surface-500: #6d77b2;
+  --color-surface-600: #5b649d;
+  --color-surface-700: #4d5482;
+  --color-surface-800: #464b6b;
+  --color-surface-900: #1a1c24;
+  --color-surface-950: #0f1015;
+  
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", Consolas, monospace;
+}
+
+html {
+  @apply bg-surface-950 text-surface-100;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-surface-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-surface-700 rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-surface-600;
+}

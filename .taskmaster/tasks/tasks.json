@@ -1,0 +1,820 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Harden Electron startup and packaging for Windows and macOS",
+        "description": "Optimize Electron app startup performance and create reliable packaging configurations for production builds on both platforms using current Python backend and Svelte UI.",
+        "details": "Update electron-builder config for Windows (NSIS installer) and macOS (dmg/pkg). Implement startup optimization: preload main window scripts, disable unnecessary nodeIntegration, use contextIsolation. Add auto-updater with electron-updater. Reference docs/desktop-architecture.md for existing structure. Use latest Electron v28+ best practices.",
+        "testStrategy": "Test startup time <3s on clean installs (Windows 11, macOS Ventura+). Verify installer creation, app launch without crashes on both platforms. Automated e2e tests with Spectron/Playwright for window load.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Implement Caching for Electron Assets",
+            "description": "Configure caching for Electron assets to reduce startup time and improve performance",
+            "details": "Use the `electron-cache` module to cache Electron assets and optimize startup performance",
+            "testStrategy": "Verify caching is enabled and assets are loaded correctly using the Electron DevTools",
+            "dependencies": [],
+            "status": "pending"
+          },
+          {
+            "id": 2,
+            "title": "Configure Windows Packaging",
+            "description": "Set up packaging configurations for Windows builds, including setup, configuration, and deployment",
+            "details": "Use the `electron-builder` module to configure Windows packaging, including setup, configuration, and deployment",
+            "testStrategy": "Verify Windows build is created successfully and can be installed on a Windows machine",
+            "dependencies": [
+              1
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 3,
+            "title": "Configure macOS Packaging",
+            "description": "Set up packaging configurations for macOS builds, including setup, configuration, and deployment",
+            "details": "Use the `electron-builder` module to configure macOS packaging, including setup, configuration, and deployment",
+            "testStrategy": "Verify macOS build is created successfully and can be installed on a macOS machine",
+            "dependencies": [
+              1
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 4,
+            "title": "Optimize Python Backend",
+            "description": "Review and optimize the Python backend to improve performance and reduce startup time",
+            "details": "Analyze Python code, identify bottlenecks, and implement optimizations to improve performance",
+            "testStrategy": "Verify optimized Python backend improves startup time and performance",
+            "dependencies": [
+              1
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 5,
+            "title": "Integrate Svelte UI with Electron",
+            "description": "Integrate the Svelte UI with the Electron app to ensure seamless interaction between the UI and Electron",
+            "details": "Use Electron APIs to integrate the Svelte UI with the Electron app, including event handling and data exchange",
+            "testStrategy": "Verify Svelte UI is integrated correctly with Electron and functions as expected",
+            "dependencies": [
+              1,
+              4
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 6,
+            "title": "Verify Production Builds",
+            "description": "Verify production builds for both Windows and macOS are created correctly and can be deployed",
+            "details": "Verify production builds are created successfully and can be deployed to production environments",
+            "testStrategy": "Verify production builds function correctly and meet requirements",
+            "dependencies": [
+              2,
+              3
+            ],
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Implement code signing for macOS and Windows production builds",
+        "description": "Add proper code signing certificates and notarization for distribution-ready builds.",
+        "details": "macOS: Configure electron-builder with Developer ID Application certificate, enable notarization with apple notarization API. Windows: Use EV code signing certificate with signtool. Add entitlements.plist for macOS hardening. Store certs securely in CI/CD (GitHub Actions).",
+        "testStrategy": "Verify signed builds pass Gatekeeper on macOS (spctl --assess --verbose). Windows: Check digital signature in Properties. Test notarization status via xcrun notarytool log.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Obtain code signing certificates for macOS",
+            "description": "Purchase and obtain code signing certificates from Apple",
+            "details": "Obtain a Developer ID Certificate and a Distribution Certificate",
+            "testStrategy": "Verify code signing certificates are correctly installed",
+            "dependencies": [],
+            "status": "pending"
+          },
+          {
+            "id": 2,
+            "title": "Obtain code signing certificates for Windows",
+            "description": "Purchase and obtain code signing certificates from Microsoft",
+            "details": "Obtain a Authenticode Certificate",
+            "testStrategy": "Verify code signing certificates are correctly installed",
+            "dependencies": [],
+            "status": "pending"
+          },
+          {
+            "id": 3,
+            "title": "Configure code signing for Xcode project",
+            "description": "Add code signing certificates to Xcode project settings",
+            "details": "Add Developer ID Certificate and Distribution Certificate to Xcode project settings",
+            "testStrategy": "Verify code signing settings are correctly configured",
+            "dependencies": [
+              1
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 4,
+            "title": "Configure code signing for Visual Studio project",
+            "description": "Add code signing certificates to Visual Studio project settings",
+            "details": "Add Authenticode Certificate to Visual Studio project settings",
+            "testStrategy": "Verify code signing settings are correctly configured",
+            "dependencies": [
+              2
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 5,
+            "title": "Implement notarization for macOS builds",
+            "description": "Submit macOS builds to Apple for notarization",
+            "details": "Submit macOS builds to Apple for notarization using the `xcodebuild` command",
+            "testStrategy": "Verify macOS builds are notarized",
+            "dependencies": [
+              3
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 6,
+            "title": "Implement notarization for Windows builds",
+            "description": "Submit Windows builds to Microsoft for notarization",
+            "details": "Submit Windows builds to Microsoft for notarization using the `msbuild` command",
+            "testStrategy": "Verify Windows builds are notarized",
+            "dependencies": [
+              4
+            ],
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Add crash reporting and product analytics integration",
+        "description": "Integrate Sentry for crash reporting and PostHog/Plausible for anonymous usage analytics.",
+        "details": "Install @sentry/electron for crash reporting with release tracking. Add PostHog analytics for key events (startup, project create, agent invoke). Implement opt-in consent dialog. Ensure local-first privacy with no PII collection.",
+        "testStrategy": "Simulate crashes and verify Sentry dashboard receipt. Track analytics events in development mode. Test opt-in flow and data transmission limits.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set up Sentry for crash reporting",
+            "description": "Install and configure Sentry SDK in the application",
+            "details": "Follow the Sentry documentation to set up the SDK in the project. This may involve adding dependencies to the project, configuring the SDK, and testing it.",
+            "testStrategy": "Verify that crash reports are sent to Sentry when a crash occurs",
+            "dependencies": [],
+            "status": "pending"
+          },
+          {
+            "id": 2,
+            "title": "Configure Sentry for application",
+            "description": "Set up organization, projects, and settings in Sentry",
+            "details": "Create a new organization and project in Sentry, set up the SDK with the correct configuration, and set up settings such as user tracking and sampling",
+            "testStrategy": "Verify that the configuration is correct and settings are applied",
+            "dependencies": [
+              1
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 3,
+            "title": "Set up PostHog for anonymous usage analytics",
+            "description": "Install and configure PostHog SDK in the application",
+            "details": "Follow the PostHog documentation to set up the SDK in the project. This may involve adding dependencies to the project, configuring the SDK, and testing it",
+            "testStrategy": "Verify that events are sent to PostHog",
+            "dependencies": [
+              1
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 4,
+            "title": "Configure PostHog for application",
+            "description": "Set up spaces, projects, and settings in PostHog",
+            "details": "Create a new space and project in PostHog, set up the SDK with the correct configuration, and set up settings such as user tracking and sampling",
+            "testStrategy": "Verify that the configuration is correct and settings are applied",
+            "dependencies": [
+              3
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 5,
+            "title": "Set up Plausible for anonymous usage analytics",
+            "description": "Install and configure Plausible SDK in the application",
+            "details": "Follow the Plausible documentation to set up the SDK in the project. This may involve adding dependencies to the project, configuring the SDK, and testing it",
+            "testStrategy": "Verify that events are sent to Plausible",
+            "dependencies": [
+              1
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 6,
+            "title": "Integrate all analytics tools",
+            "description": "Verify that all analytics tools are working correctly and sending data as expected",
+            "details": "Run tests to verify that crash reports are sent to Sentry, and events are sent to PostHog and Plausible",
+            "testStrategy": "Run automated tests to verify integration",
+            "dependencies": [
+              2,
+              4,
+              5
+            ],
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Create first-run onboarding flow for credentials and local model setup",
+        "description": "Build guided onboarding wizard for API keys, local LLM setup, and project creation.",
+        "details": "SvelteKit flow: Welcome \u2192 API keys (OpenAI/Anthropic) \u2192 Local model download (Ollama/LM Studio) \u2192 Create first project. Store encrypted in keytar (cross-platform). Progress indicators and error recovery.",
+        "testStrategy": "E2E tests for complete onboarding flow. Verify credential encryption/decryption. Test model download success/failure paths.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define API Key Input Screen",
+            "description": "Create a screen to input API key",
+            "details": "Include error handling for invalid API keys",
+            "testStrategy": "Manual testing with dummy API key",
+            "dependencies": [],
+            "status": "pending"
+          },
+          {
+            "id": 2,
+            "title": "Implement Local LLM Setup",
+            "description": "Allow users to upload their local LLM models",
+            "details": "Handle different file formats and validate model integrity",
+            "testStrategy": "Automated testing with uploaded models",
+            "dependencies": [
+              1
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 3,
+            "title": "Create Project Configuration Screen",
+            "description": "Prompt users for project details (e.g. name, description)",
+            "details": "Save project configuration in database",
+            "testStrategy": "Manual testing with sample project",
+            "dependencies": [
+              1,
+              2
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 4,
+            "title": "Integrate API Keys with Local LLM",
+            "description": "Link API keys with uploaded local models",
+            "details": "Handle API key revocation and model updates",
+            "testStrategy": "Automated testing with mocked API",
+            "dependencies": [
+              1,
+              2
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 5,
+            "title": "Add Confirmation and Launch Screen",
+            "description": "Confirm project configuration and launch onboarding flow",
+            "details": "Handle onboarding flow completion and display success message",
+            "testStrategy": "Manual testing with sample project",
+            "dependencies": [
+              3,
+              4
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 6,
+            "title": "Handle Onboarding Flow Errors",
+            "description": "Display informative error messages for user",
+            "details": "Implement retry mechanism for failed onboarding steps",
+            "testStrategy": "Automated testing with edge cases",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Improve local project management, memory persistence, and WebSocket reliability",
+        "description": "Enhance project CRUD, implement robust local memory storage, and stabilize Python-Svelte WebSocket communication.",
+        "details": "SQLite for projects/memories with full-text search (FTS5). Implement WebSocket reconnection with exponential backoff. Add project indexing for fast retrieval. Use better-sqlite3 for Python backend.",
+        "testStrategy": "Load test 1000+ memory entries with FTS queries <100ms. Simulate network drops and verify WS reconnection. CRUD tests for projects.",
+        "priority": "high",
+        "dependencies": [
+          1,
+          4
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Enhance Project CRUD Operations",
+            "description": "Implement robust project creation, reading, updating, and deletion operations",
+            "details": "Implement project service with CRUD operations, handle edge cases and exceptions",
+            "testStrategy": "Unit tests for each CRUD operation",
+            "dependencies": [],
+            "status": "pending"
+          },
+          {
+            "id": 2,
+            "title": "Implement Local Memory Storage",
+            "description": "Design and implement a robust local storage solution using Python",
+            "details": "Use a library like SQLite or PyDbLite for local data storage",
+            "testStrategy": "Integration tests for local storage",
+            "dependencies": [
+              1
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 3,
+            "title": "Improve WebSocket Communication",
+            "description": "Stabilize Python-Svelte WebSocket communication using a library like websocket-client",
+            "details": "Implement error handling and reconnection logic",
+            "testStrategy": "End-to-end tests for WebSocket communication",
+            "dependencies": [
+              2
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 4,
+            "title": "Optimize Memory Persistence",
+            "description": "Implement efficient memory persistence mechanism using a library like joblib",
+            "details": "Use caching to store frequently accessed data",
+            "testStrategy": "Performance tests for memory persistence",
+            "dependencies": [
+              2
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 5,
+            "title": "Implement WebSocket Reconnection",
+            "description": "Implement reconnection logic for WebSocket communication",
+            "details": "Use a library like websocket-client to handle reconnections",
+            "testStrategy": "End-to-end tests for WebSocket reconnection",
+            "dependencies": [
+              3
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 6,
+            "title": "Test and Refine WebSocket Communication",
+            "description": "Test and refine WebSocket communication to ensure stability and reliability",
+            "details": "Perform thorough testing of WebSocket communication",
+            "testStrategy": "End-to-end tests for WebSocket communication",
+            "dependencies": [
+              3,
+              5
+            ],
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Implement memory capture, search, and retrieval system",
+        "description": "Build persistent memory layer with semantic search and conversation history.",
+        "details": "Vector embeddings with sentence-transformers (Python) stored in SQLite vector extension or LanceDB. Hybrid search: BM25 + cosine similarity. Auto-capture chat context, decisions, code snippets.",
+        "testStrategy": "Semantic search accuracy >85% on sample queries. Retrieval latency <200ms. Memory persistence across app restarts.",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Database Schema",
+            "description": "Define the schema for the persistent memory layer",
+            "details": "Consider the data model for conversation history and semantic search",
+            "testStrategy": "Review database schema design",
+            "dependencies": [],
+            "status": "pending"
+          },
+          {
+            "id": 2,
+            "title": "Implement Data Storage",
+            "description": "Choose a suitable data storage solution (e.g., relational database, NoSQL database)",
+            "details": "Integrate data storage with conversation history and semantic search",
+            "testStrategy": "Verify data storage and retrieval",
+            "dependencies": [
+              1
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 3,
+            "title": "Develop Semantic Search Algorithm",
+            "description": "Implement a semantic search algorithm (e.g., natural language processing, information retrieval)",
+            "details": "Integrate algorithm with data storage and conversation history",
+            "testStrategy": "Evaluate search algorithm performance",
+            "dependencies": [
+              2
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 4,
+            "title": "Build Conversation History",
+            "description": "Create a data structure to store conversation history",
+            "details": "Integrate conversation history with data storage and semantic search",
+            "testStrategy": "Verify conversation history functionality",
+            "dependencies": [
+              2
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 5,
+            "title": "Implement Search and Retrieval API",
+            "description": "Expose a RESTful API for search and retrieval operations",
+            "details": "Integrate API with data storage, semantic search, and conversation history",
+            "testStrategy": "Test API endpoints for search and retrieval",
+            "dependencies": [
+              3,
+              4
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 6,
+            "title": "Test and Deploy System",
+            "description": "Perform thorough testing and deploy the system",
+            "details": "Verify system functionality and performance",
+            "testStrategy": "Review test results and deploy system",
+            "dependencies": [
+              5
+            ],
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Expand agent orchestration and background task execution",
+        "description": "Create multi-agent workflow engine with task queuing and execution monitoring.",
+        "details": "BullMQ or SQLite-based queue for background tasks. Agent registry with LLM routing. Parallel execution with worker pools. Real-time status via WebSocket.",
+        "testStrategy": "Execute 10 concurrent agent tasks without collisions. Monitor queue depth and task completion rates. Error recovery tests.",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Multi-Agent Workflow Engine Architecture",
+            "description": "Define the overall architecture of the multi-agent workflow engine, including the components and interfaces that will be used.",
+            "details": "Create a high-level design document that outlines the architecture, including the workflow engine, task queuing system, and execution monitoring components.",
+            "testStrategy": "Manual code review and architecture validation",
+            "dependencies": [],
+            "status": "pending"
+          },
+          {
+            "id": 2,
+            "title": "Implement Task Queuing System",
+            "description": "Develop a task queuing system that will be used to manage the workflow engine's tasks.",
+            "details": "Use a message broker (e.g. RabbitMQ, Apache Kafka) to implement a task queuing system that supports asynchronous task execution and monitoring.",
+            "testStrategy": "Automated testing using unit tests and integration tests",
+            "dependencies": [
+              1
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 3,
+            "title": "Develop Workflow Engine Core Logic",
+            "description": "Implement the core logic of the workflow engine, including task execution and monitoring.",
+            "details": "Use a programming language (e.g. Java, Python) to implement the workflow engine core logic, including task execution and monitoring functionality.",
+            "testStrategy": "Automated testing using unit tests and integration tests",
+            "dependencies": [
+              2
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 4,
+            "title": "Implement Execution Monitoring and Reporting",
+            "description": "Develop a system for monitoring and reporting on task execution, including tracking task status and generating reports.",
+            "details": "Use a data storage system (e.g. database, data warehouse) to store task execution data and implement a reporting system using a reporting tool (e.g. Tableau, Power BI).",
+            "testStrategy": "Automated testing using unit tests and integration tests",
+            "dependencies": [
+              3
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 5,
+            "title": "Integrate with Agent Orchestration System",
+            "description": "Integrate the workflow engine with the agent orchestration system to enable seamless task execution and monitoring.",
+            "details": "Use APIs and data formats (e.g. JSON, XML) to integrate with the agent orchestration system and enable task execution and monitoring.",
+            "testStrategy": "Automated testing using integration tests",
+            "dependencies": [
+              4
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 6,
+            "title": "Test and Deploy Workflow Engine",
+            "description": "Test the workflow engine in a production-like environment and deploy it to a cloud or on-premises infrastructure.",
+            "details": "Use a testing framework (e.g. JUnit, Pytest) to write and run automated tests and deploy the workflow engine to a cloud or on-premises infrastructure using a deployment tool (e.g. Docker, Kubernetes).",
+            "testStrategy": "Automated testing using unit tests, integration tests, and end-to-end tests",
+            "dependencies": [
+              5
+            ],
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Add organizations, team workspaces, and cloud account system",
+        "description": "Implement SaaS foundation with user accounts, orgs, and workspace hierarchy.",
+        "details": "Supabase/Postgres for auth (email/password + OAuth). Row-level security for workspaces. API routes for org/workspace CRUD. Migrate local projects to cloud.",
+        "testStrategy": "Multi-tenant isolation tests. Org invite/permissions flows. Data migration from local SQLite.",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design Database Schema for Orgs and Workspaces",
+            "description": "Create a database schema to store orgs, workspaces, and user relationships",
+            "details": "Design entities and relationships for orgs, workspaces, and users",
+            "testStrategy": "Verify schema design using ER diagrams and database queries",
+            "dependencies": [],
+            "status": "pending"
+          },
+          {
+            "id": 2,
+            "title": "Implement Org and Workspace Creation Endpoints",
+            "description": "Create REST endpoints for creating orgs and workspaces",
+            "details": "Implement API endpoints for creating orgs and workspaces, including validation and error handling",
+            "testStrategy": "Test endpoints using POST requests with valid and invalid input",
+            "dependencies": [
+              1
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 3,
+            "title": "Implement User Authentication and Authorization",
+            "description": "Integrate user authentication and authorization with orgs and workspaces",
+            "details": "Implement authentication and authorization mechanisms using JWT and roles",
+            "testStrategy": "Test authentication and authorization using valid and invalid credentials",
+            "dependencies": [
+              1,
+              2
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 4,
+            "title": "Design Cloud Account Integration",
+            "description": "Design integration with cloud providers for storage and compute resources",
+            "details": "Research and design integration with cloud providers for storage and compute resources",
+            "testStrategy": "Verify integration design using cloud provider APIs and documentation",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 5,
+            "title": "Implement Cloud Account Integration Endpoints",
+            "description": "Create REST endpoints for integrating with cloud providers",
+            "details": "Implement API endpoints for integrating with cloud providers, including validation and error handling",
+            "testStrategy": "Test endpoints using POST requests with valid and invalid input",
+            "dependencies": [
+              4
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 6,
+            "title": "Test Org, Workspace, and Cloud Account Integration",
+            "description": "Test org, workspace, and cloud account integration using valid and invalid input",
+            "details": "Test org, workspace, and cloud account integration using automated tests and manual testing",
+            "testStrategy": "Verify integration using automated tests and manual testing",
+            "dependencies": [
+              2,
+              3,
+              5
+            ],
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Implement cloud sync for projects, memories, and agent state",
+        "description": "Bi-directional sync between desktop and cloud with conflict resolution.",
+        "details": "CRDTs or operational transformation for memories. Sync queues with retry logic. Offline-first with background sync. WebSocket for real-time updates.",
+        "testStrategy": "Sync consistency across 3 devices with network interruptions. Conflict resolution scenarios. Data integrity checks.",
+        "priority": "medium",
+        "dependencies": [
+          8
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Design cloud sync architecture",
+            "description": "Define the overall architecture for cloud sync, including data storage and retrieval",
+            "details": "Research existing cloud sync solutions, identify pros and cons, and propose a custom architecture",
+            "testStrategy": "Manual review of architecture diagrams",
+            "dependencies": [],
+            "status": "pending"
+          },
+          {
+            "id": 2,
+            "title": "Implement project sync",
+            "description": "Develop code to sync projects between desktop and cloud",
+            "details": "Use a library like Firebase or AWS to handle data storage and retrieval",
+            "testStrategy": "Unit tests for project sync functionality",
+            "dependencies": [
+              "1"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 3,
+            "title": "Implement memory sync",
+            "description": "Develop code to sync memories between desktop and cloud",
+            "details": "Use a similar approach to project sync, with consideration for memory data size and complexity",
+            "testStrategy": "Integration tests for memory sync functionality",
+            "dependencies": [
+              "1",
+              "2"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 4,
+            "title": "Implement agent state sync",
+            "description": "Develop code to sync agent state between desktop and cloud",
+            "details": "Consider using a library like Redis or Memcached for efficient data storage",
+            "testStrategy": "End-to-end tests for agent state sync functionality",
+            "dependencies": [
+              "1",
+              "2",
+              "3"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 5,
+            "title": "Implement conflict resolution",
+            "description": "Develop code to resolve conflicts that arise from concurrent changes",
+            "details": "Use a library like Apache ZooKeeper or etcd to handle conflict resolution",
+            "testStrategy": "Test scenarios with simulated conflicts",
+            "dependencies": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 6,
+            "title": "Test and deploy cloud sync",
+            "description": "Test the entire cloud sync system and deploy to production",
+            "details": "Perform thorough testing of all sync functionality, including edge cases",
+            "testStrategy": "Manual testing with a small pilot group",
+            "dependencies": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Add GitHub/GitLab integration for repos and pull requests",
+        "description": "Connect to GitHub/GitLab APIs for repo context, PR summaries, and change awareness.",
+        "details": "OAuth2 flows for GitHub/GitLab. Clone repos locally. PR diff analysis with LLM. Auto-context injection into agent prompts.",
+        "testStrategy": "E2E OAuth flow. PR parsing accuracy. Context injection validation in agent responses.",
+        "priority": "medium",
+        "dependencies": [
+          8
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Connect to GitHub/GitLab APIs",
+            "description": "Establish a connection with the GitHub/GitLab APIs to retrieve repository context and pull request summaries.",
+            "details": "Implement API authentication and authorization mechanisms to securely connect to the GitHub/GitLab APIs.",
+            "testStrategy": "Verify API connections using test repositories and accounts.",
+            "dependencies": [],
+            "status": "pending"
+          },
+          {
+            "id": 2,
+            "title": "Implement Repo Context Retrieval",
+            "description": "Retrieve repository metadata (e.g., owner, name, description) from the GitHub/GitLab APIs.",
+            "details": "Use the API to fetch repository data and store it in the database or cache.",
+            "testStrategy": "Verify that repo context is correctly retrieved and stored.",
+            "dependencies": [
+              1
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 3,
+            "title": "Implement PR Summaries Retrieval",
+            "description": "Retrieve pull request summaries (e.g., title, description, status) from the GitHub/GitLab APIs.",
+            "details": "Use the API to fetch PR summaries and store them in the database or cache.",
+            "testStrategy": "Verify that PR summaries are correctly retrieved and stored.",
+            "dependencies": [
+              1
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 4,
+            "title": "Implement Change Awareness Mechanism",
+            "description": "Set up a mechanism to detect changes in repositories and pull requests.",
+            "details": "Use the API to fetch update notifications and trigger relevant actions (e.g., sending notifications).",
+            "testStrategy": "Verify that change awareness mechanism is working correctly.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 5,
+            "title": "Handle GitHub/GitLab API Rate Limits",
+            "description": "Implement mechanisms to handle rate limits imposed by the GitHub/GitLab APIs.",
+            "details": "Use caching, queuing, or other techniques to manage rate limits and prevent API errors.",
+            "testStrategy": "Verify that rate limits are handled correctly and do not impact functionality.",
+            "dependencies": [
+              1
+            ],
+            "status": "pending"
+          },
+          {
+            "id": 6,
+            "title": "Integrate with Existing Codebase",
+            "description": "Integrate the new GitHub/GitLab integration with the existing codebase and infrastructure.",
+            "details": "Update configuration files, APIs, and workflows to use the new integration.",
+            "testStrategy": "Verify that integration is working correctly and does not introduce any regressions.",
+            "dependencies": [
+              2,
+              3,
+              4
+            ],
+            "status": "pending"
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2026-03-08T00:49:59.474Z",
+      "updated": "2026-03-08T00:49:59.474Z",
+      "description": "Tasks for master context"
+    }
+  }
+}

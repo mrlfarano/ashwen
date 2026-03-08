@@ -1,0 +1,42 @@
+node_modules/
+frontend/node_modules/
+frontend/.svelte-kit/
+frontend/build/
+release/
+dist/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+ashwen.db
+.encryption_key
+.DS_Store
+.ant-colony/
+.env.taskmaster
+.mcp.json
+.cursor/mcp.json
+.vscode/mcp.json
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dev-debug.log
+# Dependency directories
+# Environment variables
+.env
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+
+# Task files
+# tasks.json
+# tasks/ 

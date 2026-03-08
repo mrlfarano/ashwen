@@ -1,0 +1,277 @@
+# Ashwen Desktop - Electron Builder Configuration
+# Optimized for Windows and macOS with hardened security for Electron v28+
+
+appId: dev.authex.ashwen
+productName: Ashwen
+copyright: Copyright © 2024 Ashwen
+
+# Build directories
+directories:
+  output: release
+  buildResources: resources
+
+# Files to include in the package
+files:
+  - electron/**/*
+  - frontend/build/**/*
+  - package.json
+  - "!**/node_modules/*/{CHANGELOG.md,README.md,readme.md,readme}"
+  - "!**/node_modules/.bin"
+  - "!**/.git"
+  - "!**/.DS_Store"
+  - "!**/Thumbs.db"
+
+# Extra resources (backend executable, native modules, etc.)
+extraResources:
+  - from: dist/backend
+    to: backend
+    filter:
+      - "**/*"
+  - from: resources
+    to: .
+    filter:
+      - icon.icns
+      - icon.ico
+      - icon.png
+
+# Compression settings
+compression: maximum
+npmRebuild: true
+
+# Auto-update configuration
+publish:
+  provider: github
+  owner: authex
+  repo: ashwen
+  releaseType: release
+
+# ========================================
+# macOS Configuration
+# ========================================
+mac:
+  category: public.app-category.developer-tools
+  icon: resources/icon.icns
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+    - target: zip
+      arch:
+        - x64
+        - arm64
+  # Hardened runtime for notarization (required)
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  # Entitlements for macOS permissions (hardened runtime)
+  entitlements: electron/entitlements.plist
+  entitlementsInherit: electron/entitlements.plist
+  # Code signing settings
+  identity: "Developer ID Application: Ashwen Team"
+  # Single app instance
+  type: application
+  # Minimum macOS version (10.15 for hardened runtime)
+  minimumSystemVersion: "10.15.0"
+  # Dark mode support
+  darkModeSupport: true
+  # Extend info with additional properties
+  extendInfo:
+    NSCameraUsageDescription: "Ashwen uses the camera for video conferencing features."
+    NSMicrophoneUsageDescription: "Ashwen uses the microphone for voice input features."
+    NSDocumentsFolderUsageDescription: "Ashwen needs access to your Documents folder for project files."
+    NSDownloadsFolderUsageDescription: "Ashwen needs access to your Downloads folder to save exports."
+
+# DMG configuration for macOS
+dmg:
+  artifactName: ${productName}-${version}-${arch}.${ext}
+  writeUpdateInfo: true
+  # Window configuration
+  window:
+    width: 540
+    height: 380
+  # Background image (optional)
+  # background: resources/dmg-background.png
+  contents:
+    - x: 140
+      y: 180
+    - x: 400
+      y: 180
+      type: link
+      path: /Applications
+  # Format settings
+  format: ULFO
+
+# PKG configuration for macOS (App Store alternative)
+pkg:
+  artifactName: ${productName}-${version}-${arch}.pkg
+  installLocation: /Applications
+  background: resources/installer-background.png
+  allowAnywhere: true
+  allowCurrentUserHome: false
+  allowRootDirectory: false
+  isVersionChecked: true
+  isRelocatable: false
+  overwriteAction: upgrade
+
+# Notarization configuration (requires Apple Developer credentials)
+# Environment variables required:
+#   CSC_LINK - Base64 encoded .p12 certificate
+#   CSC_KEY_PASSWORD - Certificate password
+#   APPLE_ID - Apple Developer account email
+#   APPLE_APP_SPECIFIC_PASSWORD - App-specific password from appleid.apple.com
+#   APPLE_TEAM_ID - Team ID from developer.apple.com
+notarize:
+  teamId: ${env.APPLE_TEAM_ID}
+
+# ========================================
+# Windows Configuration
+# ========================================
+win:
+  icon: resources/icon.ico
+  target:
+    - target: nsis
+      arch:
+        - x64
+        - arm64
+  # Code signing configuration
+  # Supports both traditional PFX and cloud signing services
+  # Cloud signing services: digicert (eSigner), sectigo, azure (Key Vault)
+  signingHashAlgorithms:
+    - sha256
+  signDlls: true
+  # Publisher name (shown in UAC dialog)
+  publisherName: Ashwen Team
+  # Request admin elevation if needed
+  requestedExecutionLevel: asInvoker
+  # Timestamp server for long-term validity
+  rfc3161TimeStampServer: http://timestamp.digicert.com
+  timeStampServer: http://timestamp.digicert.com
+  # Certificate subject name (for EV certificate)
+  certificateSubjectName: "Ashwen Team"
+  # Custom signing hook - supports both PFX and cloud signing
+  # Set USE_CLOUD_SIGNING=true to use cloud signing, or provide WIN_CSC_LINK for PFX
+  sign: scripts/windows-sign-hook.js
+  # App container
+  appContainer: false
+
+# ========================================
+# Cloud Signing Configuration (Optional)
+# ========================================
+# To use cloud signing services instead of PFX files, set these environment variables:
+#
+# CLOUD_SIGNING_SERVICE - 'digicert', 'sectigo', or 'azure'
+#
+# For DigiCert eSigner:
+#   DIGICERT_USERNAME - Your DigiCert account email
+#   DIGICERT_PASSWORD - Your DigiCert account password
+#   DIGICERT_API_KEY - API key from DigiCert
+#   DIGICERT_OTP_SECRET - TOTP secret for 2FA
+#   CLOUD_CERT_ALIAS - Certificate alias/ID from DigiCert
+#
+# For Sectigo/SSL.com CodeSigner:
+#   SECTIGO_USERNAME - Your SSL.com account email
+#   SECTIGO_PASSWORD - Your SSL.com account password
+#   SECTIGO_CLIENT_ID - OAuth client ID
+#   SECTIGO_CLIENT_SECRET - OAuth client secret
+#   CLOUD_CREDENTIAL_ID - Credential ID from SSL.com
+#
+# For Azure Key Vault:
+#   AZURE_KEY_VAULT_URL - Key Vault URL (e.g., https://your-vault.vault.azure.net/)
+#   AZURE_CERTIFICATE_NAME - Name of the certificate in Key Vault
+#   AZURE_CLIENT_ID - Azure AD app client ID
+#   AZURE_CLIENT_SECRET - Azure AD app client secret
+#   AZURE_TENANT_ID - Azure AD tenant ID
+#
+# Alternatively, use traditional PFX certificate:
+#   WIN_CSC_LINK - Path to .pfx file
+#   WIN_CSC_KEY_PASSWORD - Password for .pfx file
+
+# NSIS installer configuration for Windows
+nsis:
+  artifactName: ${productName}-Setup-${version}-${arch}.${ext}
+  # Installation options
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  allowElevation: true
+  # Installer appearance
+  installerIcon: resources/icon.ico
+  uninstallerIcon: resources/icon.ico
+  installerHeaderIcon: resources/icon.ico
+  installerSidebar: resources/installer-sidebar.bmp
+  # License and info
+  license: LICENSE
+  # Create desktop shortcut
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  # Uninstaller
+  deleteAppDataOnUninstall: false
+  # Display language selector
+  displayLanguageSelector: false
+  installerLanguages:
+    - en_US
+  language: "1033" # English (US)
+  # Per-machine or per-user installation
+  perMachine: false
+  # Run after install
+  runAfterFinish: true
+  # Shortcuts
+  shortcutName: Ashwen
+  # Include uninstaller
+  include: resources/installer.nsh
+  # Script hooks
+  preCompressFolder: resources/pre-install.js
+  # Custom pages
+  customNsisScript: resources/custom-install.nsi
+
+# Portable configuration for Windows
+portable:
+  artifactName: ${productName}-Portable-${version}-${arch}.${ext}
+
+# AppX configuration for Windows Store (optional)
+# appx:
+#   identityName: Ashwen
+#   publisher: CN=...
+#   publisherDisplayName: Ashwen
+#   backgroundColor: "#0f1015"
+#   showNameOnTiles: true
+
+# ========================================
+# Linux Configuration (for future support)
+# ========================================
+linux:
+  icon: resources/icons
+  target:
+    - AppImage
+    - deb
+  category: Development
+  maintainer: Ashwen Team
+  vendor: Ashwen
+  synopsis: AI Agents Observability Platform
+  description: Ashwen is an AI agents observability platform for project builders
+  desktop:
+    StartupNotify: true
+    Categories: Development;IDE;
+  # Deb-specific settings
+deb:
+  priority: optional
+  compression: xz
+  depends:
+    - libgtk-3-0
+    - libnotify4
+    - libnss3
+    - libxss1
+    - libxtst6
+    - xdg-utils
+
+# ========================================
+# Build Hooks
+# ========================================
+afterSign: scripts/notarize.js
+beforeBuild: scripts/prepare-build.js
+
+# ========================================
+# Electron Version
+# ========================================
+electronDownload:
+  cache: ./electron-cache
+  mirror: https://github.com/electron/electron/releases/download/

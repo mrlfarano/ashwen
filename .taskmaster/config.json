@@ -1,0 +1,44 @@
+{
+  "models": {
+    "main": {
+      "provider": "openai",
+      "modelId": "llama3.1:8b",
+      "maxTokens": 4096,
+      "baseURL": "http://100.79.147.22:11434/v1"
+    },
+    "research": {
+      "provider": "openai",
+      "modelId": "llama3.1:8b",
+      "maxTokens": 4096,
+      "baseURL": "http://100.79.147.22:11434/v1"
+    },
+    "fallback": {
+      "provider": "openai",
+      "modelId": "llama3.1:8b",
+      "maxTokens": 4096,
+      "baseURL": "http://100.79.147.22:11434/v1"
+    }
+  },
+  "global": {
+    "logLevel": "info",
+    "debug": false,
+    "defaultNumTasks": 10,
+    "defaultSubtasks": 6,
+    "defaultPriority": "medium",
+    "projectName": "Ashwen",
+    "ollamaBaseURL": "http://100.79.147.22:11434/api",
+    "responseLanguage": "English",
+    "enableCodebaseAnalysis": true,
+    "enableProxy": false,
+    "anonymousTelemetry": true,
+    "defaultTag": "master",
+    "userId": "1234567890"
+  },
+  "claudeCode": {},
+  "codexCli": {},
+  "grokCli": {
+    "timeout": 120000,
+    "workingDirectory": null,
+    "defaultModel": "grok-4-latest"
+  }
+}
